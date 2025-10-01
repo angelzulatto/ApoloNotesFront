@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/apolonotes",
+  baseURL: "https://r0jlt1sk-8080.brs.devtunnels.ms/apolonotes",
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Layout } from '../components/Layout';
-import { FileText, Calendar, Tag } from 'lucide-react';
-import { useNotes } from '../hooks/useNotes';
-import { useEvents } from '../hooks/useEvents';
-import { useTags } from '../hooks/useTags';
-import dayjs from 'dayjs';
+import { useEffect, useState } from "react";
+import { Layout } from "../components/Layout";
+import { FileText, Calendar, Tag } from "lucide-react";
+import { useNotes } from "../hooks/useNotes";
+import { useEvents } from "../hooks/useEvents";
+import { useTags } from "../hooks/useTags";
+import dayjs from "dayjs";
 
 export const Dashboard = () => {
   const { fetchNotes } = useNotes();
@@ -20,20 +20,25 @@ export const Dashboard = () => {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const notesData = await fetchNotes({ size: 1 });
+        const notesData = await fetchNotes();
         const eventsData = await fetchEvents();
 
-        const upcoming = eventsData.filter(event =>
+        const upcoming = eventsData.filter((event) =>
           dayjs(event.startAt).isAfter(dayjs())
         ).length;
 
+        console.log("Fetched Stats:", {
+          totalNotes: notesData.length,
+          upcomingEvents: upcoming,
+          totalTags: tags.length,
+        });
         setStats({
-          totalNotes: notesData.totalElements,
+          totalNotes: notesData.length,
           upcomingEvents: upcoming,
           totalTags: tags.length,
         });
       } catch (error) {
-        console.error('Failed to load stats:', error);
+        console.error("Failed to load stats:", error);
       }
     };
 
@@ -42,22 +47,22 @@ export const Dashboard = () => {
 
   const cards = [
     {
-      title: 'Total Notes',
+      title: "Total Notes",
       value: stats.totalNotes,
       icon: FileText,
-      color: 'bg-blue-500',
+      color: "bg-blue-500",
     },
     {
-      title: 'Upcoming Events',
+      title: "Upcoming Events",
       value: stats.upcomingEvents,
       icon: Calendar,
-      color: 'bg-green-500',
+      color: "bg-green-500",
     },
     {
-      title: 'Total Tags',
+      title: "Total Tags",
       value: stats.totalTags,
       icon: Tag,
-      color: 'bg-amber-500',
+      color: "bg-amber-500",
     },
   ];
 
@@ -66,7 +71,9 @@ export const Dashboard = () => {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-          <p className="text-gray-600">Overview of your notes, events, and tags</p>
+          <p className="text-gray-600">
+            Overview of your notes, events, and tags
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -80,7 +87,9 @@ export const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm mb-1">{card.title}</p>
-                    <p className="text-3xl font-bold text-gray-900">{card.value}</p>
+                    <p className="text-3xl font-bold text-gray-900">
+                      {card.value}
+                    </p>
                   </div>
                   <div className={`${card.color} p-3 rounded-lg`}>
                     <Icon className="w-6 h-6 text-white" />
@@ -92,7 +101,9 @@ export const Dashboard = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Quick Actions
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <a
               href="/notes/new"
