@@ -7,7 +7,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBfZv5UUe-LpgUnDEmm8QVFQ_BHx7JPZoE",
+  apiKey: import.meta.env.VITE_API_KEY,
   authDomain: "apolonotes.firebaseapp.com",
   projectId: "apolonotes",
   storageBucket: "apolonotes.firebasestorage.app",
