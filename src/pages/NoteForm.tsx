@@ -8,6 +8,8 @@ import { useNotes } from "../hooks/useNotes";
 import { useToast } from "../hooks/useToast";
 import { ToastContainer } from "../components/Toast";
 import { Save, ArrowLeft } from "lucide-react";
+import { TagSelector } from "../components/TagSelector";
+import { useTags } from "../hooks/useTags";
 
 const schema = yup.object({
   nombre: yup
@@ -35,7 +37,8 @@ export const NoteForm = () => {
 
   const { getNote, createNote, updateNote, loading } = useNotes();
   const { toasts, showToast, removeToast } = useToast();
-
+  const { tags } = useTags();
+  
   const {
     register,
     handleSubmit,
@@ -70,6 +73,7 @@ export const NoteForm = () => {
       navigate("/notes");
     }
   };
+  const taglistValue = watch("tagIds");
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -157,7 +161,24 @@ export const NoteForm = () => {
               </p>
             )}
           </div>
-
+            <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tags
+            </label>
+            <TagSelector
+              tags={tags}
+              selectedTagIds={
+                taglistValue
+                  ? taglistValue
+                      .split(",")
+                      .map((id) => parseInt(id.trim()))
+                      .filter((id) => !isNaN(id))
+                  : []
+              }
+              onChange={(ids) => setValue("tagIds", ids.join(","))}
+              error={errors.tagIds?.message}
+            />
+          </div>
           {isEdit && (
             <div>
               <label className="flex items-center gap-2 cursor-pointer">
