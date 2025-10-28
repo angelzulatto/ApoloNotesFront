@@ -18,12 +18,14 @@ const schema = yup.object({
     .string()
     .max(5000, "Content must be less than 5000 characters"),
   recursoActivo: yup.boolean(),
+  tagIds: yup.string().optional(),
 });
 
 type FormData = {
   nombre: string;
   contenido: string;
   recursoActivo: boolean;
+  tagIds: string;
 };
 
 export const NoteForm = () => {
@@ -46,6 +48,7 @@ export const NoteForm = () => {
       nombre: "",
       contenido: "",
       recursoActivo: true,
+      tagIds: "",
     },
   });
 

@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { RequireAuth } from './components/RequireAuth';
-import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
-import { Tags } from './pages/Tags';
-import { NotesList } from './pages/NotesList';
-import { NoteForm } from './pages/NoteForm';
-import { NoteDetail } from './pages/NoteDetail';
-import { EventsList } from './pages/EventsList';
-import { EventForm } from './pages/EventForm';
-import { EventDetail } from './pages/EventDetail';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { RequireAuth } from "./components/RequireAuth";
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
+import { Tags } from "./pages/Tags";
+import { NotesList } from "./pages/NotesList";
+import { NoteForm } from "./pages/NoteForm";
+import { NoteDetail } from "./pages/NoteDetail";
+import { EventsList } from "./pages/EventsList";
+import { EventForm } from "./pages/EventForm";
+import { EventDetail } from "./pages/EventDetail";
 
 function App() {
   return (
@@ -71,16 +71,16 @@ function App() {
         />
 
         <Route
-          path="/events"
+          path="/events/new"
           element={
             <RequireAuth>
-              <EventsList />
+              <EventForm />
             </RequireAuth>
           }
         />
 
         <Route
-          path="/events/new"
+          path="/events/:id/edit"
           element={
             <RequireAuth>
               <EventForm />
@@ -98,10 +98,10 @@ function App() {
         />
 
         <Route
-          path="/events/:id/edit"
+          path="/events"
           element={
             <RequireAuth>
-              <EventForm />
+              <EventsList />
             </RequireAuth>
           }
         />

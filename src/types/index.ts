@@ -1,6 +1,6 @@
 export interface Tag {
   id: number;
-  name: string;
+  nombreTag: string;
 }
 
 export interface Note {
@@ -8,7 +8,7 @@ export interface Note {
   title: string;
   content: string;
   archived: boolean;
-  tags: Tag[];
+  tags: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,7 +19,7 @@ export interface Event {
   description?: string;
   startAt: string;
   endAt?: string;
-  tags: Tag[];
+  tags: string;
 }
 
 export interface LoginRequest {
@@ -34,7 +34,7 @@ export interface LoginResponse {
 export interface CreateNoteRequest {
   title: string;
   content: string;
-  tagIds: number[];
+  tagIds: string;
 }
 
 export interface UpdateNoteRequest {
@@ -45,27 +45,28 @@ export interface UpdateNoteRequest {
 }
 
 export interface CreateEventRequest {
-  title: string;
-  description?: string;
-  startAt: string;
-  endAt?: string;
-  tagIds: number[];
+  nombre: string;
+  contenido?: string;
+  fechaCreacion: string;
+  fechaDeEvento?: string;
+  taglist?: string;
 }
 
 export interface UpdateEventRequest {
-  title: string;
-  description?: string;
-  startAt: string;
-  endAt?: string;
-  tagIds: number[];
+  nombre: string;
+  contenido?: string;
+  fechaCreacion: string;
+  fechaDeEvento?: string;
+  taglist?: string;
+  recursoActivo?: boolean;
 }
 
 export interface CreateTagRequest {
-  name: string;
+  nombreTag: string;
 }
 
 export interface UpdateTagRequest {
-  name: string;
+  nombreTag: string;
 }
 
 export interface PaginatedResponse<T> {

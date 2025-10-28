@@ -1,66 +1,53 @@
 import { useEffect, useState } from "react";
 import { Layout } from "../components/Layout";
 import { FileText, Calendar, Tag } from "lucide-react";
-import { useNotes } from "../hooks/useNotes";
-import { useEvents } from "../hooks/useEvents";
-import { useTags } from "../hooks/useTags";
 import dayjs from "dayjs";
+import { listNotes } from "../services/notes";
+import { listEvents } from "../services/events";
+import { listTags } from "../services/tags";
 
 export const Dashboard = () => {
-  const { fetchNotes } = useNotes();
-  const { fetchEvents } = useEvents();
-  const { tags } = useTags();
-
-  const [stats, setStats] = useState({
-    totalNotes: 0,
-    upcomingEvents: 0,
-    totalTags: tags.length,
-  });
+  const [totalTags, setTotalTags] = useState(0);
+  const [totalEvents, setTotalEvents] = useState(0);
+  const [totalNotes, setTotalNotes] = useState(0);
 
   useEffect(() => {
+    console.log("loadStats");
     const loadStats = async () => {
+      console.log("loading stats");
       try {
-        const notesData = await fetchNotes();
-        const eventsData = await fetchEvents();
-
-        const upcoming = eventsData.filter((event) =>
-          dayjs(event.startAt).isAfter(dayjs())
-        ).length;
-
-        console.log("Fetched Stats:", {
-          totalNotes: notesData.length,
-          upcomingEvents: upcoming,
-          totalTags: tags.length,
-        });
-        setStats({
-          totalNotes: notesData.length,
-          upcomingEvents: upcoming,
-          totalTags: tags.length,
-        });
+        const notesData = await listNotes();
+        setTotalNotes(notesData.filter((note) => note.recursoActivo).length);
+        const eventsData = await listEvents();
+        setTotalEvents(
+          eventsData.filter((event) => event.recursoActivo).length
+        );
+        const tagsData = await listTags();
+        setTotalTags(tagsData.length);
       } catch (error) {
         console.error("Failed to load stats:", error);
       }
     };
 
     loadStats();
-  }, [tags.length]);
+  }, []);
 
   const cards = [
     {
       title: "Total Notes",
-      value: stats.totalNotes,
+      value: totalNotes,
       icon: FileText,
       color: "bg-blue-500",
     },
     {
       title: "Upcoming Events",
-      value: stats.upcomingEvents,
+      value: totalEvents,
       icon: Calendar,
       color: "bg-green-500",
     },
     {
       title: "Total Tags",
-      value: stats.totalTags,
+      value: totalTags,
       icon: Tag,
       color: "bg-amber-500",
     },

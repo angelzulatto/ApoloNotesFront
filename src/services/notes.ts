@@ -24,7 +24,6 @@ export interface UpdateNotaRequest {
 
 export const listNotes = async (): Promise<Nota[]> => {
   const response = await api.get<Nota[]>("/notas");
-  console.log(response.data, "data");
   return response.data;
 };
 
