@@ -2,19 +2,19 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, FileText, Calendar, Tag, Menu, X } from "lucide-react"; // Added Menu, X
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react"; // Added useState
+import { firebaseLogout } from "../services/auth";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Added state for mobile menu
 
   const handleLogout = () => {
-    logout();
+    firebaseLogout();
     navigate("/login");
   };
 

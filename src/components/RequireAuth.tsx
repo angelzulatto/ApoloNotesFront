@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { auth } from "../services/firebase";
 
 interface RequireAuthProps {
   children: React.ReactNode;
@@ -8,7 +9,8 @@ interface RequireAuthProps {
 export const RequireAuth = ({ children }: RequireAuthProps) => {
   const { isAuthenticated } = useAuthStore();
 
-  // if (!isAuthenticated) {
+  console.log("Current user from Firebase auth:", auth.currentUser);
+  // if (!auth.currentUser) {
   //   return <Navigate to="/login" replace />;
   // }
 
