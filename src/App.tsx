@@ -9,8 +9,27 @@ import { NoteDetail } from "./pages/NoteDetail";
 import { EventsList } from "./pages/EventsList";
 import { EventForm } from "./pages/EventForm";
 import { EventDetail } from "./pages/EventDetail";
+import { useEffect } from "react";
+import { useToast, ToastType } from "./hooks/useToast";
+import { ToastContainer } from "./components/Toast";
+import {
+  registerToastHandler,
+  unregisterToastHandler,
+} from "./services/toastService";
 
 function App() {
+  const { toasts, showToast, removeToast } = useToast();
+
+  useEffect(() => {
+    // Register handler so non-React modules can trigger toasts
+    registerToastHandler((message, type: ToastType = "info") => {
+      showToast(message, type);
+    });
+    return () => {
+      unregisterToastHandler();
+    };
+  }, [showToast]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -108,6 +127,7 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </BrowserRouter>
   );
 }

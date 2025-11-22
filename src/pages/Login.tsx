@@ -31,6 +31,11 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  // TEMPORARY: Trigger error for verification
+  if (new URLSearchParams(window.location.search).get('error')) {
+    throw new Error("This is a test error to verify the Error Page.");
+  }
+
   const {
     register,
     handleSubmit,

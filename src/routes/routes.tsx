@@ -3,16 +3,20 @@ import { Login } from "../pages/Login";
 import { AuthGuard } from "../components/RequireAuth";
 import PrivateRoutes from "./privateRoutes";
 import AuthorizationLayout from "../components/AuthLayout";
+import ErrorPage from "../pages/ErrorPage";
 
 export const routes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <ErrorPage />,
   },
   {
     element: <AuthorizationLayout />,
     children: [...PrivateRoutes()],
+    errorElement: <ErrorPage />,
   },
+
 ]);
 
 export default routes;
