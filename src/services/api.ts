@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { showToast } from "./toastService";
 
 const api = axios.create({
-  baseURL: "https://r0jlt1sk-8080.brs.devtunnels.ms/apolonotes/",
+  baseURL: "http://localhost:8080/apolonotes/",
   headers: {
     "Content-Type": "application/json",
   },
