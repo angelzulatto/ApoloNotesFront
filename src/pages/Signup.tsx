@@ -16,9 +16,13 @@ const signUpSchema = yup.object({
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,16}$/,
             "Password must contain at least one lowercase letter, one uppercase letter, and one number"
         ),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref("password")], "Passwords must match")
+        .required("Confirm Password is required"),
 });
 
-type SignUpRequest = { email: string; password: string };
+type SignUpRequest = { email: string; password: string; confirmPassword: string };
 
 export const Signup = () => {
     const [signUpLoading, setSignUpLoading] = useState(false);
@@ -33,13 +37,13 @@ export const Signup = () => {
     });
 
     const onSubmitSignUp = async (data: SignUpRequest) => {
+        setSignUpLoading(true);
         try {
             await firebaseSignUp(data.email, data.password);
             navigate("/");
         } catch (error) {
-            console.error("Firebase signup failed:", error);
+            console.error(error);
             setSignUpLoading(false);
-            return;
         }
     };
 
@@ -102,13 +106,30 @@ export const Signup = () => {
                         )}
                     </div>
 
+                    <div>
+                        <label
+                            htmlFor="confirmPassword"
+                            className="block text-sm font-medium text-gray-700 mb-2"
+                        >
+                            Confirmar Contraseña
+                        </label>
+                        <input
+                            {...registerSignUp("confirmPassword")}
+                            type="password"
+                            id="confirmPassword"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            placeholder="Confirma tu contraseña"
+                        />
+                        {signUpErrors.confirmPassword && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {signUpErrors.confirmPassword.message}
+                            </p>
+                        )}
+                    </div>
+
                     <button
                         type="submit"
                         disabled={signUpLoading}
-                        onClick={() => {
-                            setSignUpLoading(true);
-                            handleSubmitSignUp(onSubmitSignUp)();
-                        }}
                         className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
                     >
                         {signUpLoading ? "Creando cuenta..." : "Crear cuenta"}

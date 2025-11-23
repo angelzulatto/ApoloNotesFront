@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^1.14.0",
     "@hookform/resolvers": "^5.2.2",
     "@supabase/supabase-js": "^2.57.4",
     "axios": "^1.12.2",

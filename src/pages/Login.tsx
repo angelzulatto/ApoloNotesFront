@@ -9,16 +9,17 @@ import {
   firebaseSignUpWithGoogle,
 } from "../services/auth";
 import { useState } from "react";
+import { showToast } from "../services/toastService";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const schema = yup.object({
   username: yup.string().email().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
 
-
-
 export const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -36,12 +37,13 @@ export const Login = () => {
   });
 
   const onSubmit = async (data: LoginRequest) => {
+    setLoading(true);
     try {
       console.log("Attempting Firebase login with:", data);
       await firebaseLogin(data.username, data.password);
       navigate("/");
     } catch (error) {
-      console.error("Firebase login failed:", error);
+      showToast("Error al iniciar sesión", "error");
       setLoading(false);
       return;
     }
@@ -52,9 +54,14 @@ export const Login = () => {
       await firebaseSignUpWithGoogle();
       navigate("/");
     } catch (error) {
-      console.error("Firebase signup with google failed:", error);
+      showToast("Error al iniciar sesión con Google", "error");
       return;
     }
+  };
+
+  const handleVerificationSuccess = (token: string, ekey: string) => {
+    console.log("Captcha verified", token);
+    setCaptchaToken(token);
   };
 
   return (
@@ -112,18 +119,22 @@ export const Login = () => {
               </p>
             )}
           </div>
-
+          <div className="flex justify-center">
+            <HCaptcha
+              sitekey={import.meta.env.VITE_CAPTCHA_KEY}
+              onVerify={handleVerificationSuccess}
+            />
+          </div>
           <button
             type="submit"
-            disabled={loading}
-            onClick={() => {
-              setLoading(true);
-              handleSubmit(onSubmit)();
-            }}
+            disabled={loading || !captchaToken}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
           >
             {loading ? "Ingresando..." : "Iniciar sesión"}
           </button>
+
+
+
           <button
             type="button"
             onClick={onSubmitSignUpWithGoogle}
