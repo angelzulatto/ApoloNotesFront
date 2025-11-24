@@ -11,16 +11,15 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
+    
     const status = error.response?.status;
-    console.log(error);
-    if (error.code === "ECONNABORTED") {
-      showToast("Solicitud Expirada ", "error");
+    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+      showToast("Timeout: Solicitud Expirada", "error");
     }
     if (status === 400) {
       showToast("Solicitud inválida", "error");
     } else if (status === 401) {
       showToast("No autorizado. Por favor inicia sesión.", "error");
-      // Optionally clear token or redirect here
     } else if (status === 403) {
       showToast("Acceso denegado", "error");
     } else if (status && status >= 500) {

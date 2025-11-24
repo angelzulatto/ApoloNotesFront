@@ -7,8 +7,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { Toast } from "../components/Toast";
 import { showToast } from "./toastService";
+import { FirebaseError } from "firebase/app";
 
 export const login = async (
   credentials: LoginRequest
@@ -23,8 +23,9 @@ export const firebaseLogin = async (
 ): Promise<void> => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
-  } catch (error: any) {
-    console.error(error);
+  } catch (error: unknown) {
+    const firebaseError = error as FirebaseError;
+   showToast(firebaseError.message, "error");
     throw error;
   }
 };
@@ -39,9 +40,10 @@ export const firebaseSignUp = async (
 ): Promise<void> => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    showToast(error.message, "error");
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    showToast(errorMessage, "error");
     throw error;
   }
 };
@@ -56,9 +58,10 @@ export const firebaseSignUpWithGoogle = async (): Promise<void> => {
       const user = result.user;
       console.log(token, user);
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    showToast(error.message, "error");
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    showToast(errorMessage, "error");
     throw error;
   }
 };

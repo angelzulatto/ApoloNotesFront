@@ -43,7 +43,6 @@ export const Login = () => {
       await firebaseLogin(data.username, data.password);
       navigate("/");
     } catch (error) {
-      showToast("Error al iniciar sesión", "error");
       setLoading(false);
       return;
     }
