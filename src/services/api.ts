@@ -6,15 +6,17 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 10000,
+  timeout: 20000,
 });
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    
     const status = error.response?.status;
-    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+    if (error.code === "ECONNABORTED") {
       showToast("Timeout: Solicitud Expirada", "error");
+    }
+    if (!error.response && error.code === "ERR_NETWORK") {
+      showToast("Error de red: el servidor no responde o está caído", "error");
     }
     if (status === 400) {
       showToast("Solicitud inválida", "error");
